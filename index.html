@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" class="notranslate" translate="no">
+    <head>
+    	<meta name="google" content="notranslate" />
+        <meta charset="UTF-8">
+        <meta name="description" content="Transform Video to GIF">
+        <meta name="keywords" content="Canvas,Video,GIF,Encode">
+       	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+	    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />  
+	    <meta http-equiv="Content-Language" content="en" />
+	    <meta name="msapplication-TileColor" content="#ffffff" />
+	    <meta name="theme-color" content="#ffffff" />
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	    <meta name="apple-mobile-web-app-capable" content="yes" />
+	    <meta name="mobile-web-app-capable" content="yes" />
+	    <meta name="HandheldFriendly" content="True" />
+	    <meta name="MobileOptimized" content="320" />  
+	    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+        <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+        <link href="css/main.css" rel="stylesheet" type="text/css">
+        <title>ᴠɪᴅᴇᴏ ᴛᴏ GIF ᴍᴀᴋᴇʀ</title>
+    </head>
+	<body>         
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <p id="copyrightBanner">© Copyright <span id="yearDisplay"></span> | Created by <a href="https://medium.com/@geek-cc" target="_blank">the Girl with a ribbon</a> ξ(🎀˶❛◡❛) | Inspired by: 🎞 📽 <a href="https://ezgif.com/video-to-gif" target="_blank">video to animated GIF converter</a></p>
+		<h2>📽 Video Clip to GIF Conversion</h2>
+		<p><button id='inputVideoClipFileBtn' type='button' class='btn btn-outline-dark'>📤 <small>Upload Video!</small><input id='inputVideoClipFile' type='file' multiple='false' accept='.mp4,.webm,.avi,.mpeg,.flv,.mov,.3gp' /></button> ⇽ 🏁 <b>START!</b></p>
+		<hr>
+		<div id='inputVideoClipFileInfo' class='table-responsive'>
+			<table class="table table-bordered">
+				<thead>
+					<tr align="left">
+						<th colspan='2' id='inputVideoPreview' class='imageBg'><h3>🎦 Uploaded Preview</h3></th>
+					</tr>
+				</thead>
+				<tbody id='inputVideoDetails'></tbody>
+			</table>
+			<div id='loadingBar'></div>
+		</div>
+		<script type="text/javascript" src="js/LZWEncoder.js"></script>
+		<script type="text/javascript" src="js/NeuQuant.js"></script>
+		<script type="text/javascript" src="js/GIFEncoder.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+        <!-- // Video by <a href="https://pixabay.com/users/julientromeur-3630051/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=25144">Julien Tromeur</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=25144">Pixabay</a> -->
+	</body>
+</html>
