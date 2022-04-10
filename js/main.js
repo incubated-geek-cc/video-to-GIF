@@ -1,3 +1,5 @@
+var framesToRemove={};
+
 var yearDisplay=document.getElementById('yearDisplay');
 yearDisplay.innerHTML=new Date().getFullYear();
 
@@ -50,12 +52,14 @@ const loadProgressMapper = [
 ];
 const byteToKBScale = 0.0009765625;
 var counter=0;
+const frameInterval = 225;
 
 inputVideoClipFile.onchange = function(uploadFle) {
     if(uploadFle.target.value !== '' && uploadFle.target.files.length>0) {
         if (!window.FileReader) {
             alert('Your browser does not support HTML5 "FileReader" function required to open a file.');
         } else {
+        	framesToRemove={};
             let file = inputVideoClipFile.files[0];
 
             let fileName=file.name;
@@ -114,7 +118,7 @@ inputVideoClipFile.onchange = function(uploadFle) {
 
 		            const encoder = new GIFEncoder(vidWidth, vidHeight);
 		            encoder.setRepeat(0);
-		        	encoder.setDelay(500);
+		        	encoder.setDelay(frameInterval);
 		        		
 		            let staticFrames='';
 		            let frameIndex=0;
@@ -129,10 +133,17 @@ inputVideoClipFile.onchange = function(uploadFle) {
 						await new Promise(resolve => {
 					        bitmapCtx.drawImage(inputVideo, 0, 0, vidWidth, vidHeight);
 					        frameB64Str = bitmapCanvas.toDataURL();
-				        	encoder.addFrame(bitmapCtx);
+					        if(Object.keys(framesToRemove).length===0) {
+					        	framesToRemove[frameB64Str]=true;
+					        }
+					        if(!framesToRemove[frameB64Str]) {
+				        		encoder.addFrame(bitmapCtx);
+				        	}
 				        	resolve();
 					    });
-					    staticFrames+=`<th><small>Frame #${frameIndex++}</small><br><img src=${frameB64Str} width='75' /></th>`;
+					    if(!framesToRemove[frameB64Str]) {
+						    staticFrames+=`<th><small>Frame #${frameIndex++}</small><br><img src=${frameB64Str} width='75' /></th>`;
+						}
 					    window.requestAnimationFrame(step);
 					};
 		        	inputVideo.addEventListener('play', () => {
