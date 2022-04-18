@@ -52,7 +52,9 @@ const loadProgressMapper = [
 ];
 const byteToKBScale = 0.0009765625;
 var counter=0;
-const frameInterval = 225;
+
+var fps=60;
+var frameInterval=165;
 
 inputVideoClipFile.onchange = function(uploadFle) {
     if(uploadFle.target.value !== '' && uploadFle.target.files.length>0) {
@@ -71,9 +73,9 @@ inputVideoClipFile.onchange = function(uploadFle) {
                 var b64Str=fle.target.result;
                 
                 if(videoObj.canPlayType(fileType)) {
-                	videoObj.setAttribute('id','inputVideo');
-					videoObj.setAttribute('src', b64Str);
-					videoObj.setAttribute('height', displayedHeight);
+                	videoObj.id='inputVideo';
+					videoObj.src=b64Str;
+					videoObj.height=displayedHeight;
 				}
 				inputVideoPreview.insertAdjacentHTML('beforeend',`${videoObj.outerHTML}`);
                 videoObj.oncanplay = () => {
@@ -83,7 +85,7 @@ inputVideoClipFile.onchange = function(uploadFle) {
 					    if(counter === loadProgressMapper.length) { 
 					    	counter=0;
 					    }
-                	}, 50);
+                	}, 1000/fps);
 
 					vidDuration=parseInt(videoObj.duration);
 
@@ -101,9 +103,10 @@ inputVideoClipFile.onchange = function(uploadFle) {
 
 					inputVideoDetails.innerHTML=videoDetails;
 
-					bitmap.setAttribute('id', 'bitmap');
-					bitmap.setAttribute('width', vidWidth);
-		            bitmap.setAttribute('height', vidHeight);
+					bitmap.id='bitmap';
+					bitmap.width=vidWidth;
+		            bitmap.height=vidHeight;
+
 		            inputVideoPreview.insertAdjacentHTML('beforeend', `<div style="display:none">${bitmap.outerHTML}</div>`);
 
 		            const inputVideo=document.getElementById('inputVideo');
@@ -119,7 +122,8 @@ inputVideoClipFile.onchange = function(uploadFle) {
 		            const encoder = new GIFEncoder(vidWidth, vidHeight);
 		            encoder.setRepeat(0);
 		        	encoder.setDelay(frameInterval);
-		        		
+	        		encoder.setQuality(10);
+
 		            let staticFrames='';
 		            let frameIndex=0;
 
@@ -127,17 +131,21 @@ inputVideoClipFile.onchange = function(uploadFle) {
 					inputVideo.loop = false;
 					inputVideo.autoplay=true;
 
+					var continueAddFrame=true;
+
 					var frameB64Str='';
 					const step = async() => {
 						let bgStatus=await background();
 						await new Promise(resolve => {
 					        bitmapCtx.drawImage(inputVideo, 0, 0, vidWidth, vidHeight);
-					        frameB64Str = bitmapCanvas.toDataURL();
+					        frameB64Str=bitmapCanvas.toDataURL();
 					        if(Object.keys(framesToRemove).length===0) {
 					        	framesToRemove[frameB64Str]=true;
 					        }
 					        if(!framesToRemove[frameB64Str]) {
-				        		encoder.addFrame(bitmapCtx);
+					        	if(continueAddFrame) {
+				        			encoder.addFrame(bitmapCtx);
+				        		}
 				        	}
 				        	resolve();
 					    });
@@ -153,6 +161,7 @@ inputVideoClipFile.onchange = function(uploadFle) {
 		        	});
 		        	inputVideo.addEventListener('ended', () => {
 		        		clearInterval(toContinueLoading);
+		        		continueAddFrame=false;
 		        		loadingBar.innerHTML='';
 					  	encoder.finish();
 
