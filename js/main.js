@@ -1,6 +1,10 @@
-var framesToRemove={};
+const byteToKBScale = 0.0009765625;
+const displayedSize=500;
+const requiredFPS=10;
+// window.devicePixelRatio = 3.0;
+const scale = window.devicePixelRatio;
 
-var yearDisplay=document.getElementById('yearDisplay');
+const yearDisplay=document.getElementById('yearDisplay');
 yearDisplay.innerHTML=new Date().getFullYear();
 
 function encode64(input) {
@@ -33,27 +37,8 @@ inputVideoClipFileBtn.addEventListener('click', () => {
 });
 
 var loadingBar=document.getElementById('loadingBar');
-const loadProgressMapper = [
-    '▯▯▯▯▯▯▯▯▯▯',
-    '▮▯▯▯▯▯▯▯▯▯',
-    '▮▮▯▯▯▯▯▯▯▯',
-    '▮▮▮▯▯▯▯▯▯▯',
-    '▮▮▮▮▯▯▯▯▯▯',
-    '▮▮▮▮▮▯▯▯▯▯',
-    '▮▮▮▮▮▮▯▯▯▯',
-    '▮▮▮▮▮▮▮▯▯▯',
-    '▮▮▮▮▮▮▮▮▯▯',
-    '▮▮▮▮▮▮▮▮▮▯',
-    '▮▮▮▮▮▮▮▮▮▮'
-];
-const byteToKBScale = 0.0009765625;
-const displayedSize=500;
-
 var continueCallback=true;
-// window.devicePixelRatio = 3.0;
-var scale = window.devicePixelRatio;
-var requiredFPS=10;
-var fps;
+var FPS=0;
 
 function scaleCanvas(_CANVAS, videoObj, vidHeight, vidWidth, scale) {
     _CANVAS['style']['height'] = `${vidHeight}px`;
@@ -62,7 +47,7 @@ function scaleCanvas(_CANVAS, videoObj, vidHeight, vidWidth, scale) {
     let cWidth=vidWidth*scale;
     let cHeight=vidHeight*scale;
 
-     _CANVAS.width=cWidth;
+    _CANVAS.width=cWidth;
     _CANVAS.height=cHeight;
 
     _CANVAS.getContext('2d').scale(scale, scale);
@@ -76,7 +61,7 @@ function readFileAsDataURL(file) {
         fileredr.readAsDataURL(file);
     });
 }
-// oncanplay
+
 const loadVideo = (url) => new Promise((resolve, reject) => {
     var vid = document.createElement('video');
     vid.addEventListener('canplay', () => resolve(vid));
@@ -138,29 +123,35 @@ inputVideoClipFile.addEventListener('change', async(evt) => {
 
 	var encoder = new GIFEncoder(vidWidth, vidHeight);
     encoder.setRepeat(0);
-	encoder.setDelay(8);
+	encoder.setDelay(0);
 	encoder.setQuality(10);
 
-	var startTime=0.0;
+	var startTime=0;
 	var frameIndex=0;
 	var staticFrames='';
 
 	const step = async() => {
-		await new Promise(resolve => {
-			if(startTime == 0.0) startTime=(Date.now()); // in milliseconds
+		if(startTime == 0) { 
+			startTime=(Date.now()); 
+		}// in milliseconds
 			
-			let _CANVAS_CTX=_CANVAS.getContext('2d');
-	      	_CANVAS_CTX.drawImage(videoObj, 0, 0, displayedWidth, displayedHeight);
-	      	encoder.addFrame(_CANVAS_CTX);
+		let _CANVAS_CTX=_CANVAS.getContext('2d');
+      	_CANVAS_CTX.drawImage(videoObj, 0, 0, displayedWidth, displayedHeight);
+      	encoder.addFrame(_CANVAS_CTX);
 
-	      	let frameB64Str=_CANVAS.toDataURL();
-	      	staticFrames+=`<th><small>Frame #${frameIndex++}</small><br><img src=${frameB64Str} width='75' /></th>`;
-
-	      	let elapsed = ((Date.now()) - startTime) / 1000.0;
-	      	fps = (frameIndex / elapsed);
-
-	      	resolve();
-      	});
+      	let frameB64Str=_CANVAS.toDataURL();
+      	staticFrames+=`<th><small>Frame #${frameIndex++}</small><br><img src=${frameB64Str} width='75' /></th>`;
+      	
+      	if(FPS==0) { 
+      		let elapsed = ((Date.now()) - startTime) / 1000.0;
+      		FPS=parseInt((frameIndex / elapsed)*1000); 
+      	}
+      	let requiredFPSDelay=(requiredFPS*1000)-FPS;
+      	if(requiredFPSDelay<0) {
+      		requiredFPSDelay=0;
+      	}
+      	// wait for difference in seconds before encoding another frame
+  		await new Promise((resolve, reject) => setTimeout(resolve, 0));
       	if(continueCallback) {
       		videoObj.requestVideoFrameCallback(step);
       	}
@@ -213,7 +204,7 @@ inputVideoClipFile.addEventListener('change', async(evt) => {
         					`Type: <b>${fileType}</b>`, 
         					`Size: <b>${fileSize} ㎅</b>`, 
         					`# of Frame(s): <b>${frameIndex}</b>`,
-        					`FPS: <b>${fps.toFixed(2)}</b>`, 
+        					`FPS: <b>${requiredFPS}</b>`, 
         					`Frame (ᴡ ⨯ ʜ): <b>${ parseInt(vidWidth)} ᵖˣ ⨯ ${vidHeight} ᵖˣ</b>`,
         					`${dwnlnk.outerHTML}`
     					].join(' │ ') +'</td>'; 
