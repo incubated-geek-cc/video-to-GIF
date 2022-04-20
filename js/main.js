@@ -99,7 +99,7 @@ inputVideoClipFile.addEventListener('change', async(evt) => {
 	videoObj.muted=true;
 	videoObj.loop=false;
 
-	let vidDuration=videoObj.duration;
+	let vidDuration=parseInt(videoObj.duration);
 	let vidHeight=videoObj.videoHeight; // 720
 	let vidWidth=videoObj.videoWidth; // 1280
 
@@ -138,7 +138,7 @@ inputVideoClipFile.addEventListener('change', async(evt) => {
 
 	var encoder = new GIFEncoder(vidWidth, vidHeight);
     encoder.setRepeat(0);
-	encoder.setDelay(0);
+	encoder.setDelay(8);
 	encoder.setQuality(10);
 
 	var startTime=0.0;
