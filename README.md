@@ -20,4 +20,7 @@ Note: All file(s) were retrieved from [jsgif](https://github.com/antimatter15/js
 
 ---
 
-Article available at: https://geek-cc.medium.com/how-to-convert-a-video-clip-to-a-gif-file-with-client-side-javascript-56575d093191
+### Related Content
+
+* [How to Convert a Video Clip to a GIF File with Client-side JavaScript](https://geek-cc.medium.com/how-to-convert-a-video-clip-to-a-gif-file-with-client-side-javascript-56575d093191)
+* [Video to GIF Conversion with Client-side JavaScript —Decoding fps for GIF](https://geek-cc.medium.com/video-to-gif-conversion-with-client-side-javascript-decoding-fps-for-gif-bf96b8bc4d7c)
