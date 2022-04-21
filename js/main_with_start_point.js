@@ -33,6 +33,8 @@ inputVideoClipFileBtn.addEventListener('click', () => {
 	let clickEvent = new MouseEvent('click', { view: window, bubbles: false, cancelable: false });
     inputVideoClipFile.dispatchEvent(clickEvent);
 });
+
+var startPoint=document.getElementById('startPoint');
 var loadingBar=document.getElementById('loadingBar');
 var continueCallback=true;
 var FPS=0;
@@ -82,6 +84,13 @@ inputVideoClipFile.addEventListener('change', async(evt) => {
 
 	let vidDuration=parseInt(videoObj.duration);
 
+	startPoint.setAttribute('max', vidDuration);
+
+	startPoint.addEventListener('change', (evt) => {
+		let newStartTime=evt.target.value;
+		videoObj.currentTime=newStartTime;
+	}, false);
+	
 	let vidHeight=videoObj.videoHeight; // 720
 	let vidWidth=videoObj.videoWidth; // 1280
 
@@ -214,5 +223,9 @@ inputVideoClipFile.addEventListener('change', async(evt) => {
         inputVideoDetails.insertAdjacentHTML('afterend', htmlStr);
 	}, false);
 
-	videoObj.play();
+	var convertBtn=document.getElementById('convertBtn');
+	convertBtn.addEventListener('click', () => {
+		videoObj.play();
+		convertBtn.removeEventListener('click',null,false);
+	}, false);
 });

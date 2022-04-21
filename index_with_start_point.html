@@ -18,7 +18,7 @@
 	    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
         <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
         <link href="css/main.css" rel="stylesheet" type="text/css">
-        <title>ᴠɪᴅᴇᴏ ᴛᴏ GIF ᴍᴀᴋᴇʀ</title>
+        <title>ᴠɪᴅᴇᴏ ᴛᴏ GIF ᴍᴀᴋᴇʀ (with start point)</title>
     </head>
 	<body>         
         <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -53,6 +53,11 @@
 								<option value='34'>34 fps</option>
 								<option value='50'>50 fps</option>
 							<select>
+							<span><small>Start Point:</small></span>
+							<input id='startPoint' type='number' min='0' value='0' step='1' />
+							<!-- <span><small>End Point:</small></span>
+							<input id='endPoint' type='number' min='0' value='0' step='1' /> -->
+							<span><button id='convertBtn' type='button' class='btn btn-outline-dark'><small>Convert to GIF</small></button></span>
 						</h3></th>
 					</tr>
 				</thead>
@@ -63,7 +68,7 @@
 		<script type="text/javascript" src="js/LZWEncoder.js"></script>
 		<script type="text/javascript" src="js/NeuQuant.js"></script>
 		<script type="text/javascript" src="js/GIFEncoder.js"></script>
-		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript" src="js/main_with_start_point.js"></script>
 		<div id='hiddenCanvas' style='display:none'></div>
         <!-- // Video by <a href="https://pixabay.com/users/julientromeur-3630051/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=25144">Julien Tromeur</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=25144">Pixabay</a> -->
 	</body>

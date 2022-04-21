@@ -4,6 +4,7 @@ html, body {
     border:0;
     overflow:hidden;
     font-family:'Arial';
+    overflow-x: hidden;
 }
 body {
     height: calc(100vh - 0.25rem);
@@ -209,4 +210,30 @@ th.imageBg {
 h3 {
     margin-block-start: 0.25em;
     margin-block-end: 0.25em;
+}
+#startPoint,
+#endPoint,
+#fpsDropdownList,
+#convertBtn {
+    display: inline-block;
+    padding: 0.1em;
+    width: fit-content;
+    font-size: 0.8em;
+    border-radius: 0;
+    border-color: #0078d7;
+    color: #0078d7;
+    font-variant: proportional-nums;
+    border-width: 1px;
+    border-style: solid;
+}
+
+#convertBtn {
+    font-variant: all-petite-caps;
+}
+
+
+#convertBtn:hover {
+    color: #fff;
+    background-color: #0078d7;
+    border-color: #0078d7;
 }
