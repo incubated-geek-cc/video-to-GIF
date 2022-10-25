@@ -1,6 +1,6 @@
 const byteToKBScale = 0.0009765625;
 const displayedSize=500;
-// window.devicePixelRatio = 3.0;
+
 const scale = window.devicePixelRatio;
 const yearDisplay=document.getElementById('yearDisplay');
 yearDisplay.innerHTML=new Date().getFullYear();
@@ -26,8 +26,7 @@ function encode64(input) {
 
 var inputVideoClipFile=document.getElementById('inputVideoClipFile');
 var inputVideoClipFileBtn=document.getElementById('inputVideoClipFileBtn');
-var inputVideoDetails = document.getElementById('inputVideoDetails');
-var inputVideoPreview = document.getElementById('inputVideoPreview');
+var inputVideoDetails=document.getElementById('inputVideoDetails');
 
 inputVideoClipFileBtn.addEventListener('click', () => {
 	let clickEvent = new MouseEvent('click', { view: window, bubbles: false, cancelable: false });
@@ -36,6 +35,13 @@ inputVideoClipFileBtn.addEventListener('click', () => {
 var loadingBar=document.getElementById('loadingBar');
 var continueCallback=true;
 var FPS=0;
+
+function toggleImageSmoothing(_CANVAS, isEnabled) {
+	_CANVAS.getContext('2d').mozImageSmoothingEnabled = isEnabled;
+	_CANVAS.getContext('2d').webkitImageSmoothingEnabled = isEnabled;
+	_CANVAS.getContext('2d').msImageSmoothingEnabled = isEnabled;
+	_CANVAS.getContext('2d').imageSmoothingEnabled = isEnabled;
+}
 
 function scaleCanvas(_CANVAS, videoObj, vidHeight, vidWidth, scale) {
     _CANVAS['style']['height'] = `${vidHeight}px`;
@@ -47,6 +53,7 @@ function scaleCanvas(_CANVAS, videoObj, vidHeight, vidWidth, scale) {
     _CANVAS.width=cWidth;
     _CANVAS.height=cHeight;
 
+    toggleImageSmoothing(_CANVAS, true);
     _CANVAS.getContext('2d').scale(scale, scale);
 }
 
@@ -58,7 +65,6 @@ function readFileAsDataURL(file) {
         fileredr.readAsDataURL(file);
     });
 }
-
 const loadVideo = (url) => new Promise((resolve, reject) => {
     var vid = document.createElement('video');
     vid.addEventListener('canplay', () => resolve(vid));
@@ -66,7 +72,9 @@ const loadVideo = (url) => new Promise((resolve, reject) => {
     vid.src = url;
 });
 inputVideoClipFile.addEventListener('change', async(evt) => {
-	if (!window.FileReader) { alert('Your browser does not support HTML5 "FileReader" function required to open a file.'); return; } 
+	if (!window.FileReader) { 
+		alert('Your browser does not support HTML5 "FileReader" function required to open a file.'); return; 
+	} 
 	let file = evt.target.files[0];
     if(!file) return;
 
@@ -80,7 +88,8 @@ inputVideoClipFile.addEventListener('change', async(evt) => {
 	videoObj.muted=true;
 	videoObj.loop=false;
 
-	let vidDuration=parseInt(videoObj.duration);
+	let exactVideoDuration=videoObj.duration;
+	let vidDuration=parseInt(exactVideoDuration);
 
 	let vidHeight=videoObj.videoHeight; // 720
 	let vidWidth=videoObj.videoWidth; // 1280
@@ -89,8 +98,7 @@ inputVideoClipFile.addEventListener('change', async(evt) => {
 	videoObj.width=vidWidth;
 	videoObj['style']['height']=`${vidHeight}px`;
 	videoObj['style']['width']=`${vidWidth}px`;
-
-	inputVideoPreview.appendChild(videoObj);
+	document.getElementById('inputVideoPreview').appendChild(videoObj);
 
 	let videoDetails='<tr><td>ℹ '+[
 		`File Name: <b>${fileName}</b>`,
@@ -105,6 +113,25 @@ inputVideoClipFile.addEventListener('change', async(evt) => {
 	scaleCanvas(_CANVAS, videoObj, vidHeight, vidWidth, scale);
 	document.getElementById('hiddenCanvas').appendChild(_CANVAS);
     // =============== calculate displayed sizes ====================
+    let totalFrames=33;
+	if(exactVideoDuration <= 10) {
+    	totalFrames=33;
+	} else if(exactVideoDuration <= 12) {
+	    totalFrames=25;
+	} else if(exactVideoDuration <= 15) {
+		totalFrames=20;
+	} else if(exactVideoDuration <= 25) {
+		totalFrames=12;
+	} else if(exactVideoDuration <= 30) {
+		totalFrames=10;
+	} else if(exactVideoDuration <= 35) {
+		totalFrames=8;
+	} else if(exactVideoDuration <= 42) {
+		totalFrames=7;
+	} else if(exactVideoDuration <= 60) {
+		totalFrames=5;
+	}
+
     let sizeBenchmark=vidHeight;
     if(vidWidth>vidHeight) {
     	sizeBenchmark=vidWidth;
@@ -119,41 +146,38 @@ inputVideoClipFile.addEventListener('change', async(evt) => {
 	scaleCanvas(_CANVAS, videoObj, displayedHeight, displayedWidth, scale);
 
 	var encoder = new GIFEncoder(vidWidth, vidHeight);
-    encoder.setRepeat(0);
-	encoder.setDelay(6);
-	encoder.setQuality(18);//  [1,30] | Best=1 | >20 not much speed improvement.
+    encoder.setRepeat(0); // 0 for repeat, -1 for no-repeat
+    encoder.setDelay(0);  // frame delay in ms // 500
+	encoder.setQuality(16); // [1,30] | Best=1 | >20 not much speed improvement. 10 is default.
 
+	// Sets frame rate in frames per second
 	var startTime=0;
 	var frameIndex=0;
 	var staticFrames='';
 
-	var requiredFPSDelay=0;
-	var requiredFPS=parseInt(document.getElementById('fpsDropdownList').value);
+	var jsonArrRecords=[];
+	var jsonObjRecord={};
+
 	const step = async() => {
-		if(startTime == 0) { 
-			startTime=(Date.now()); 
-		}// in milliseconds
-		
-		let _CANVAS_CTX=_CANVAS.getContext('2d');
-      	_CANVAS_CTX.drawImage(videoObj, 0, 0, displayedWidth, displayedHeight);
-      	encoder.addFrame(_CANVAS_CTX);
+		// in milliseconds
+		startTime=( startTime==0 ? Date.now() : 0);
+      	_CANVAS.getContext('2d').drawImage(videoObj, 0, 0, displayedWidth, displayedHeight);
+      	encoder.addFrame(_CANVAS.getContext('2d'));
 
       	let frameB64Str=_CANVAS.toDataURL();
       	staticFrames+=`<th><small>Frame #${frameIndex++}</small><br><img src=${frameB64Str} width='75' /></th>`;
       	
-      	if(FPS==0) { 
-      		let elapsed = ((Date.now()) - startTime) / 1000.0;
-      		FPS=(frameIndex / elapsed)*1000.0;
-      		requiredFPSDelay=FPS-(requiredFPS*1000);
-	      	if(requiredFPSDelay<0) {
-	      		requiredFPSDelay=0;
-	      	}
+      	if(FPS==0) {
+      		let ms_elapsed = ((Date.now()) - startTime);
+      		FPS=(frameIndex / ms_elapsed)*1000.0;
+      		console.log('FPS: '+FPS+' | Duration: '+exactVideoDuration);
+      		let encodeDelaySetting=( (FPS*exactVideoDuration) >= totalFrames ) ? 0 : (( (totalFrames*1.0)/exactVideoDuration)-FPS);
+      		encodeDelaySetting=Math.floor(encodeDelaySetting*1000);
+			console.log(encodeDelaySetting);
+			encoder.setDelay(encodeDelaySetting);
       	}
       	
-	    // console.log([FPS, (requiredFPS*1000), requiredFPSDelay]);
-  		await new Promise((resolve, reject) => setTimeout(resolve, requiredFPSDelay));
-
-      	if(continueCallback) {
+      	if(continueCallback) { 
       		videoObj.requestVideoFrameCallback(step);
       	}
     };
@@ -205,7 +229,6 @@ inputVideoClipFile.addEventListener('change', async(evt) => {
         					`Type: <b>${fileType}</b>`, 
         					`Size: <b>${fileSize} ㎅</b>`, 
         					`# of Frame(s): <b>${frameIndex}</b>`,
-        					`FPS: <b>${document.getElementById('fpsDropdownList').value}</b>`, 
         					`Frame (ᴡ ⨯ ʜ): <b>${ parseInt(vidWidth)} ᵖˣ ⨯ ${vidHeight} ᵖˣ</b>`,
         					`${dwnlnk.outerHTML}`
     					].join(' │ ') +'</td>'; 
