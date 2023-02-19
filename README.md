@@ -1,26 +1,51 @@
-# video-to-GIF
-### An offline non-server dependent utility to convert video clips e.g. mp4 to GIF files. Inspired by [video to animated GIF converter](https://ezgif.com/video-to-gif)
+<div align="center">
+  <img src="https://github.com/incubated-geek-cc/video-to-GIF/raw/main/img/logo.png" width="96" alt="logo">
 
-![Overview](https://miro.medium.com/max/1050/1*taLQG9Rfdwc2MpKaArxskg.png)
+  # 🎞️ video-to-GIF
 
-### 3 primary JavaScript plugins used
-* GIFEncoder.js
-* LZWEncoder.js
-* NeuQuant.js
+  ### 🛠️ Converts video clips (.mp4) to gif (.gif) files. Uses HTML5 Canvas to render image graphics.
 
-Note: All file(s) were retrieved from [jsgif](https://github.com/antimatter15/jsgif)
+**🔌 An offline in-browser setup.**
 
-### Running the tool
+<div align="left">
 
-* No server required
-* Just double-click the HTML file to run it on any JavaScript-enabled browser
+### 💻 Main JavaScript Plugins
 
-### Demo
-![Demo](https://miro.medium.com/max/900/1*L0B8O8kG3-j9ZaRw0gWz1Q.gif)
+</div>
+<div align="left">
+<ul>
+	<li>GIFEncoder.js</li>
+	<li>LZWEncoder.js</li>
+	<li>NeuQuant.js</li>
+</ul>
+
+### 🌟 Try it yourself
+[**Live Demo :: Link**](https://incubated-geek-cc.github.io/video-to-GIF/)
+
+### ✍ Read articles here!
+[**Article One :: Link**](https://geek-cc.medium.com/how-to-convert-a-video-clip-to-a-gif-file-with-client-side-javascript-56575d093191)
+[**Article One :: Link**](https://geek-cc.medium.com/video-to-gif-conversion-with-client-side-javascript-decoding-fps-for-gif-bf96b8bc4d7c)
+
+### 📌 Features
+
+</div>
+<div align="left">
+	<ul>
+		<li>File upload</li>
+		<li>Renders preview of GIF</li>
+		<li>GIF file export</li>
+	</ul>
+</div>
+</div>
+
+### 👀 Preview
+<img src='https://miro.medium.com/max/900/1*L0B8O8kG3-j9ZaRw0gWz1Q.gif' width="800px" />
+
+<p>— <b>Join me on 📝 <b>Medium</b> at <a href='https://medium.com/@geek-cc' target='_blank'>~ ξ(🎀˶❛◡❛) @geek-cc</a></b></p>
 
 ---
 
-### Related Content
+#### 🌮 Please buy me a <a href='https://www.buymeacoffee.com/geekcc' target='_blank'>Taco</a>! 😋
 
-* [How to Convert a Video Clip to a GIF File with Client-side JavaScript](https://geek-cc.medium.com/how-to-convert-a-video-clip-to-a-gif-file-with-client-side-javascript-56575d093191)
-* [Video to GIF Conversion with Client-side JavaScript —Decoding fps for GIF](https://geek-cc.medium.com/video-to-gif-conversion-with-client-side-javascript-decoding-fps-for-gif-bf96b8bc4d7c)
+## Special Mention(s)
+- Inspired by [video to animated GIF converter](https://ezgif.com/video-to-gif).
