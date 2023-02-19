@@ -23,7 +23,7 @@
 [**Live Demo :: Link**](https://incubated-geek-cc.github.io/video-to-GIF/)
 
 ### ✍ Read articles here!
-[**Article One :: Link**](https://geek-cc.medium.com/how-to-convert-a-video-clip-to-a-gif-file-with-client-side-javascript-56575d093191)
+[**Article One :: Link**](https://geek-cc.medium.com/how-to-convert-a-video-clip-to-a-gif-file-with-client-side-javascript-56575d093191)<br>
 [**Article One :: Link**](https://geek-cc.medium.com/video-to-gif-conversion-with-client-side-javascript-decoding-fps-for-gif-bf96b8bc4d7c)
 
 ### 📌 Features
