@@ -1,7 +1,4 @@
-
-<h4>🚨 Important‼ Project repo for video-to-GIF has been moved to <a href='https://github.com/incubated-geek-cc/video-to-GIF2' target='_blank'>video-to-GIF2</a>.</h4>
-
----
+<h1>🚨 Important‼ <span>Project repo has been moved to <a href='https://github.com/incubated-geek-cc/video-to-GIF2' target='_blank'>video-to-GIF2</a>!</span></h1> 
 
 <div align="center">
   <img src="https://github.com/incubated-geek-cc/video-to-GIF/raw/main/img/logo.png" width="96" alt="logo">
