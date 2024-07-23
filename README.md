@@ -1,3 +1,8 @@
+
+<h4>🚨 Important‼ Project repo for video-to-GIF has been moved to <a href='https://github.com/incubated-geek-cc/video-to-GIF2' target='_blank'>video-to-GIF2</a>.</h4>
+
+---
+
 <div align="center">
   <img src="https://github.com/incubated-geek-cc/video-to-GIF/raw/main/img/logo.png" width="96" alt="logo">
 
@@ -45,7 +50,7 @@
 
 ---
 
-#### 🌮 Please buy me a <a href='https://www.buymeacoffee.com/geekcc' target='_blank'>Taco</a>! 😋
+#### 🌮 Please buy me a <a href='https://www.buymeacoffee.com/geekcc' target='_blank'><img src='https://github.com/incubated-geek-cc/incubated-geek-cc/raw/main/buy_me_a_taco.png' /></a>! 😋
 
 ## Special Mention(s)
 - Inspired by [video to animated GIF converter](https://ezgif.com/video-to-gif).
